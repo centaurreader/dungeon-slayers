@@ -1,4 +1,6 @@
-# Squad
+# Dungeon Slayers
+
+Crawl scenario-based dungeons and slay everything in your path.
 
 ## TODO
 - [x] Display abilities of current player/monster turn
