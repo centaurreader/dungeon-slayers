@@ -329,6 +329,12 @@ function State() {
     ]);
   };
 
+  let turnData = {};
+  this.setTurnData = (key, value) => { turnData[key] = value; };
+  this.getTurnData = (key) => turnData[key];
+  this.removeTurnData = (key) => { delete turnData[key] };
+  this.clearTurnData = () => { turnData = {}; };
+
   let monsters = null;
   this.setMonsters = (m) => { monsters = m; };
   this.getMonsters = () => monsters;
