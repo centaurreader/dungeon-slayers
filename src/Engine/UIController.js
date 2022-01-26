@@ -1,13 +1,21 @@
 class UIController {
-  elements = [];
+  scenes = [];
 
-  constructor(elements) {
-    this.elements = elements;
+  constructor(scenes) {
+    this.scenes = scenes;
+  }
+
+  pushScene(scene) {
+    this.scenes.push(scene);
+  }
+
+  popScene(scene) {
+    this.scenes.pop(scene);
   }
 
   updateUi(state) {
-    this.elements.forEach((element) => {
-      element.update(state);
+    this.scenes.forEach((scene) => {
+      scene.update(state);
     });
   }
 }

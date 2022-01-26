@@ -522,13 +522,17 @@ function hmrAcceptRun(bundle, id) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 var _gameJs = require("./Engine/Game.js");
 var _gameJsDefault = parcelHelpers.interopDefault(_gameJs);
+var _uisceneJs = require("./Engine/UIScene.js");
+var _uisceneJsDefault = parcelHelpers.interopDefault(_uisceneJs);
 var _startGameButtonJs = require("./UIElements/StartGameButton.js");
 var _startGameButtonJsDefault = parcelHelpers.interopDefault(_startGameButtonJs);
 const game = new _gameJsDefault.default([
-    new _startGameButtonJsDefault.default(document.getElementById('start_game')), 
+    new _uisceneJsDefault.default('main-menu', document.getElementById('main_menu'), [
+        new _startGameButtonJsDefault.default(document.getElementById('start_game')), 
+    ]), 
 ]);
 
-},{"./Engine/Game.js":"c1ZQq","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./UIElements/StartGameButton.js":"fCi4m"}],"c1ZQq":[function(require,module,exports) {
+},{"./Engine/Game.js":"c1ZQq","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./UIElements/StartGameButton.js":"fCi4m","./Engine/UIScene.js":"fQ8H6"}],"c1ZQq":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _gameStateJs = require("./GameState.js");
@@ -607,13 +611,19 @@ exports.export = function(dest, destName, get) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 class UIController {
-    elements = [];
-    constructor(elements){
-        this.elements = elements;
+    scenes = [];
+    constructor(scenes){
+        this.scenes = scenes;
+    }
+    pushScene(scene) {
+        this.scenes.push(scene);
+    }
+    popScene(scene) {
+        this.scenes.pop(scene);
     }
     updateUi(state) {
-        this.elements.forEach((element)=>{
-            element.update(state);
+        this.scenes.forEach((scene)=>{
+            scene.update(state);
         });
     }
 }
@@ -658,6 +668,31 @@ class UIElement {
 }
 exports.default = UIElement;
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["2I7h8","alK4Z"], "alK4Z", "parcelRequire963c")
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"fQ8H6":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+var _uielement = require("./UIElement");
+var _uielementDefault = parcelHelpers.interopDefault(_uielement);
+class UIScene extends _uielementDefault.default {
+    elements = [];
+    constructor(name, element, elements){
+        super(element);
+        this.name = name;
+        this.elements = elements;
+    }
+    update(state) {
+        this.elements.forEach((element)=>{
+            element.update(state);
+        });
+    }
+    setUpdateCallback(callback) {
+        this.updateState = callback;
+        this.elements.forEach((element)=>element.setUpdateCallback(callback)
+        );
+    }
+}
+exports.default = UIScene;
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./UIElement":"3WXOC"}]},["2I7h8","alK4Z"], "alK4Z", "parcelRequire963c")
 
 //# sourceMappingURL=index2.d67ac236.js.map
