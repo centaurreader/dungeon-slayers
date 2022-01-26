@@ -522,17 +522,17 @@ function hmrAcceptRun(bundle, id) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 var _gameJs = require("./Engine/Game.js");
 var _gameJsDefault = parcelHelpers.interopDefault(_gameJs);
-var _uisceneJs = require("./Engine/UIScene.js");
-var _uisceneJsDefault = parcelHelpers.interopDefault(_uisceneJs);
-var _startGameButtonJs = require("./UIElements/StartGameButton.js");
-var _startGameButtonJsDefault = parcelHelpers.interopDefault(_startGameButtonJs);
+var _scMainMenuJs = require("./UIElements/sc_MainMenu.js");
+var _scMainMenuJsDefault = parcelHelpers.interopDefault(_scMainMenuJs);
+var _uiStartGameButtonJs = require("./UIElements/ui_StartGameButton.js");
+var _uiStartGameButtonJsDefault = parcelHelpers.interopDefault(_uiStartGameButtonJs);
 const game = new _gameJsDefault.default([
-    new _uisceneJsDefault.default('main-menu', document.getElementById('main_menu'), [
-        new _startGameButtonJsDefault.default(document.getElementById('start_game')), 
+    new _scMainMenuJsDefault.default(document.getElementById('main_menu'), [
+        new _uiStartGameButtonJsDefault.default(document.getElementById('start_game')), 
     ]), 
 ]);
 
-},{"./Engine/Game.js":"c1ZQq","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./UIElements/StartGameButton.js":"fCi4m","./Engine/UIScene.js":"fQ8H6"}],"c1ZQq":[function(require,module,exports) {
+},{"./Engine/Game.js":"c1ZQq","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./UIElements/ui_StartGameButton.js":"8ILuV","./UIElements/sc_MainMenu.js":"aTkY9"}],"c1ZQq":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _gameStateJs = require("./GameState.js");
@@ -629,7 +629,7 @@ class UIController {
 }
 exports.default = UIController;
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"fCi4m":[function(require,module,exports) {
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"8ILuV":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _uielementJs = require("../Engine/UIElement.js");
@@ -649,7 +649,7 @@ class StartGameButton extends _uielementJsDefault.default {
 }
 exports.default = StartGameButton;
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","../Engine/UIElement.js":"3WXOC"}],"3WXOC":[function(require,module,exports) {
+},{"../Engine/UIElement.js":"3WXOC","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"3WXOC":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 class UIElement {
@@ -668,7 +668,19 @@ class UIElement {
 }
 exports.default = UIElement;
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"fQ8H6":[function(require,module,exports) {
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"aTkY9":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+var _uiscene = require("../Engine/UIScene");
+var _uisceneDefault = parcelHelpers.interopDefault(_uiscene);
+class MainMenuScene extends _uisceneDefault.default {
+    constructor(element, elements){
+        super('main_menu', element, elements);
+    }
+}
+exports.default = MainMenuScene;
+
+},{"../Engine/UIScene":"fQ8H6","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"fQ8H6":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _uielement = require("./UIElement");
