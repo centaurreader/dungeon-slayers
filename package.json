@@ -1,0 +1,25 @@
+{
+  "name": "dungeon-slayers",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Crawl scenario-based dungeons and slay everything in your path.",
+  "main": "index.js",
+  "scripts": {
+    "start": "parcel src/index2.html",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/centaurreader/dungeon-slayers.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/centaurreader/dungeon-slayers/issues"
+  },
+  "homepage": "https://github.com/centaurreader/dungeon-slayers#readme",
+  "devDependencies": {
+    "parcel": "^2.2.1"
+  }
+}
