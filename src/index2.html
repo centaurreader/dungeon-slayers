@@ -6,12 +6,31 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Castle Slayers</title>
         <link rel="stylesheet" href="style.css">
+        <style>
+            .background {
+                position: absolute;
+                top: 0;
+                right: 0;
+                left: 0;
+                bottom: 0;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                z-index: 1;
+            }
+        </style>
     </head>
     <body>
-        <div className="main_menu">
-            <button type="button" id="start_game">
-                Start
-            </button>
+        <template id="main_menu">
+            <div>
+                <button type="button" id="start_game">
+                    Start
+                </button>
+            </div> 
+        </template>
+
+        <div aria-hidden class="background">
+            Castle Slayers
         </div>
         <script src="app2.js" type="module"></script> 
     </body>
