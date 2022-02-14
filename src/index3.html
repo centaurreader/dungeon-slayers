@@ -10,15 +10,22 @@
    <template id="main_menu_template">
        <div>
            <h1>castle slayers</h1>
-           <button type="button" id="new_game_button">New Game</button>
+           <form id="new_game_form">
+            <label for="name">
+                Name
+                <input type="text" name="name" />
+            </label>
+            <button type="submit" id="new_game_button">New Game</button>
+           </form>
        </div>
    </template> 
    <template id="game_template">
        <div>
            <h1>castle slayers</h1>
+           <p id="game_greeting"></p>
            <button type="button" id="quit_game_button">Quit Game</button>
        </div>
    </template>
-   <script src="app3.js"></script>
+   <script src="app3.js" type="module"></script>
 </body>
 </html>
