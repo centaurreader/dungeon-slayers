@@ -5,10 +5,11 @@ import StartGameButton from './UIElements/ui_StartGameButton.js';
 const game = new Game(
   [
     new MainMenuScene(
-      document.getElementById('main_menu'),
+      () => document.getElementById('main_menu'),
       [
-        new StartGameButton(document.getElementById('start_game')),
+        new StartGameButton(() => document.querySelector('[data-id="start_game"]')),
       ],
     ),
   ],
 );
+window.game = game;

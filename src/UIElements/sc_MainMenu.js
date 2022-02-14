@@ -19,9 +19,9 @@ class MainMenuScene extends UIScene {
     }
   `;
 
-  constructor(element, elements) {
-    super('main_menu', element, elements);
-    this.element.setAttribute('style', 'display: none;');
+  constructor(getElement, elements) {
+    super('main_menu', getElement, elements);
+    this.getElement().setAttribute('style', 'display: none;');
     this.init();
   }
 
@@ -36,7 +36,7 @@ class MainMenuScene extends UIScene {
 
     const mainMenu = document.getElementById('main_menu-instance');
     if (!mainMenu) {
-      const newMenu = this.element.content.cloneNode(true).querySelector('div');
+      const newMenu = this.getElement().content.cloneNode(true).querySelector('div');
       this.instance = newMenu;
       document.body.appendChild(newMenu);
     } else {

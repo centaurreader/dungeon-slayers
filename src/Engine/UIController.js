@@ -1,16 +1,19 @@
 class UIController {
   scenes = [];
 
+  currentScene = null;
+
   constructor(scenes) {
     this.scenes = scenes;
   }
 
-  pushScene(scene) {
-    this.scenes.push(scene);
-  }
-
-  popScene(scene) {
-    this.scenes.pop(scene);
+  /**
+   * @param {import('./UIScene').default} scene 
+   */
+  setScene(scene) {
+    this.currentScene = scene;
+    this.currentScene.init();
+    this.currentScene.initElements();
   }
 
   updateUi(state) {

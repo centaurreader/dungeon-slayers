@@ -1,10 +1,20 @@
 class UIElement {
+  /**
+   * @type {(state: import('./GameState').CastleSlayersState) => void | null}
+   */
   updateState = null;
-  element = null;
 
-  constructor(element, state) {
-    this.element = element;
-    this.state = state;
+  /**
+   * @type {() => Element | null}
+   */
+  getElement = null;
+
+  constructor(getElement) {
+    this.getElement = getElement;
+  }
+
+  init() {
+    throw new Error('Init not implemented');
   }
 
   set() {

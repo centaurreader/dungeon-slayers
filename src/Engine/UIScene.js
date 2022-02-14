@@ -5,10 +5,10 @@ class UIScene extends UIElement {
 
   constructor(
     name,
-    element,
+    getElement,
     elements,
   ) {
-    super(element);
+    super(getElement);
     this.name = name;
     this.elements = elements;
   }
@@ -22,6 +22,10 @@ class UIScene extends UIElement {
   setUpdateCallback(callback) {
     this.updateState = callback;
     this.elements.forEach((element) => element.setUpdateCallback(callback));
+  }
+
+  initElements() {
+    this.elements.forEach((element) => element.init());
   }
 }
 
