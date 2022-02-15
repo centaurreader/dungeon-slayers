@@ -27,6 +27,8 @@ GameState
     - [ ] display save slots
     - [ ] load game
 - [ ] game
-    - [ ] display name
-    - [ ] allow "quit"
-    - [ ] scroll map inside viewport
+    - [x] display name
+    - [x] allow "quit"
+    - [x] scroll map inside viewport
+    - [ ] render enemies in starting positions
+    - [ ] render player in starting positions

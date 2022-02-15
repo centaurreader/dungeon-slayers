@@ -1,0 +1,21 @@
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+
+#game h1 { position: absolute; left: 1rem; top: 1rem; }
+#game #game_greeting { position: absolute; left: 1rem; top: 4rem; }
+#game #map {
+    height: 100vh;
+    width: 100vw;
+    overflow: scroll;
+}
+#game #map .row {
+    display: flex;
+}
+#game #map .col {
+    flex: 1 0 25vw;
+    height: 25vh;
+    border: 1px solid cyan;
+    background-color: lightgray;
+}
+#game #map .col.col--active { background-color: azure; }
+#game #quit_game_button { position: absolute; right: 1rem; top: 1rem; }
