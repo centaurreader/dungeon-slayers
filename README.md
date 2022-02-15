@@ -21,7 +21,12 @@ GameState
 
 ## TODO
 - [ ] main menu
-    - [ ] start game
-        - [ ] name character
-        - [ ] persist save file
-- [ ] scroll map inside viewport
+    - [x] start game
+        - [x] name character
+        - [x] persist save file
+    - [ ] display save slots
+    - [ ] load game
+- [ ] game
+    - [ ] display name
+    - [ ] allow "quit"
+    - [ ] scroll map inside viewport

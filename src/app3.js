@@ -1,5 +1,11 @@
 import GameState from './CentEngine/GameState.js';
 import UIScene from './CentEngine/UIScene.js';
+import Persistence from './CentEngine/Persistence.js';
+
+const persistence = new Persistence({
+  key: 'crdss',
+  slotCount: 3,
+});
 
 const game = new GameState({
   initialState: {},
@@ -15,6 +21,7 @@ const game = new GameState({
           state.updateStateObject({
             name: data.get('name'),
           });
+          persistence.save(persistence.slots[0].id, { name: data.get('name') });
           state.changeScene(state.scenes.find((scene) => scene.name === 'GAME'));
         });
       },

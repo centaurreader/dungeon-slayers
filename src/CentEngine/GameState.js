@@ -37,10 +37,10 @@ class GameState {
    * @param {Record<string, unknown>} stateUpdate
    */
   updateStateObject(stateUpdate) {
-    this.stateObject = Object.freeze({
+    this.stateObject = {
       ...this.stateObject,
       ...stateUpdate,
-    });
+    };
   }
 }
 
