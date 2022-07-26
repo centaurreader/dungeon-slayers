@@ -1,394 +1,182 @@
-/**
- * @typedef {[number, number]} Dimensions
- */
+class Nation {
+  /**
+   * @type {string}
+   */
+  name = '';
 
-/**
- * @typedef {[number, number]} Coordinate
- */
+  /**
+   * @type {string}
+   */
+  id = null;
 
-/**
- * @typedef {Record<string, unknown>} ArenaOptions
- * @property {Dimensions} dimensions
- * @property {number} monsterCount
- */
+  /**
+   * @type {Terrain[][]}
+   */
+  terrain = [];
 
-/**
- * @typedef {Record<string, unknown>} GameOptions
- * @property {number} playerCount
- * @property {ArenaOptions} arena
- */
+  /**
+   * @type {Terrain}
+   */
+  nationTerrain = null;
 
-/**
- * @typedef {Record<string, unknown>} Entity
- * @property {string} name
- * @property {Coordinate} position
- * @property {HTMLElement} el
- * @property {string[]} abilities
- * @property {number} hp
- */
-
-/**
- * @typedef {Record<string, unknown>} Monster
- * @extends {Entity}
- */
-
-/**
- * @typedef {Record<string, unknown>} Player
- * @extends {Entity}
- * @property {number} playerNumber
- */
-
-/**
- * @type {GameOptions}
- */
-const GAME_OPTIONS = {
-  playerCount: 1,
-  arena: {
-    dimensions: [8, 8],
-    monsterCount: 2,
-  },
-};
-
-const ABILITIES_MAP = {
-  blue: 'lightning',
-  black: 'physical',
-  white: 'evade',
-  red: 'fire',
-};
-
-const mapEl = document.getElementById('map');
-const turnOrderEl = document.getElementById('turn_order');
-const abilitiesEl = document.getElementById('abilities');
-
-function createModal(content) {
-  const modalContainerEl = document.createElement('div');
-  const modalScrimEl = document.createElement('div');
-  modalScrimEl.classList.add('scrim');
-  modalContainerEl.appendChild(modalScrimEl);
-  const modalEl = document.createElement('div');
-  modalEl.classList.add('modal');
-  modalEl.appendChild(content);
-  modalContainerEl.appendChild(modalEl);
-  return modalContainerEl;
-}
-
-function requestAbilities(state) {
-  const abilityFormEl = document.createElement('form');
-  const abilityListEl = document.createElement('ul');
-  state.getTurnOrder()[0].abilities.forEach((ability, i) => {
-    const abilityEl = document.createElement('li');
-    const abilityLabelEl = document.createElement('label');
-    abilityLabelEl.setAttribute('for', `${ability}-${i}`);
-
-    const abilityInputEl = document.createElement('input');
-    abilityInputEl.setAttribute('type', 'checkbox');
-    abilityInputEl.setAttribute('name', `${ability}-${i}`);
-    abilityLabelEl.appendChild(abilityInputEl);
-    
-    const abilityLabelContentEl = document.createElement('span');
-    console.log(ability);
-    abilityLabelContentEl.innerText = ability;
-    abilityLabelEl.appendChild(abilityLabelContentEl);
-
-    abilityEl.appendChild(abilityLabelEl);
-    abilityListEl.appendChild(abilityEl);
-  });
-  abilityFormEl.appendChild(abilityListEl);
-
-  const abilitySubmitEl = document.createElement('button');
-  abilitySubmitEl.innerText = 'Select Abilities';
-  abilityFormEl.appendChild(abilitySubmitEl);
-
-  const modal = createModal(abilityFormEl);
-
-  abilityFormEl.addEventListener('submit', (event) => {
-    event.preventDefault();
-    document.body.removeChild(modal);
-  });
-
-  document.body.appendChild(modal);
-}
-
-/**
- * @param {Coordinate} curr 
- * @param {Coordinate} dest 
- * @returns {Coordinate[]} 
- */
-function calcPath(curr, dest) {
-  const isMovingDown = curr[1] < dest[1];
-  const isMovingUp = curr[1] > dest[1];
-  const isMovingRight = curr[0] < dest[0];
-  const isMovingLeft = curr[0] > dest[0];
-
-  const moves = [];
-  // move on y axis
-  if (isMovingDown) {
-    for (let i = 1; i <= dest[1]; i++) {
-      moves.push([curr[0], curr[1] + i]);
-    }
-  } else if (isMovingUp) {
-    for (let i = curr[1] - 1; i >= dest[1]; i--) {
-      moves.push([curr[0], curr[1] - (curr[1] - i)]);
-    }
-  }
-  // move on x axis
-  const yPos = moves.length ? moves[moves.length - 1][1] : curr[1];
-  if (isMovingRight) {
-    for (let i = 1; i <= dest[0]; i++) {
-      moves.push([curr[0] + i, yPos]);
-    }
-  } else if (isMovingLeft) {
-    for (let i = curr[0] - 1; i >= dest[0]; i--) {
-      moves.push([curr[0] - (curr[0] - i), yPos]);
-    }
-  }
-
-  return moves;
-}
-
-/**
- * @param {State} state
- * @returns {HTMLElement}
- */
-function genArena(state) {
-  return new Array(state.getOptions().arena.dimensions[1])
-    .fill(undefined)
-    .map((_, rowIndex) => {
-      const rowEl = document.createElement('tr');
-      const rowId = `row-${rowIndex}`;
-      rowEl.setAttribute('id', rowId);
-      return {
-        id: rowId,
-        cols: new Array(state.getOptions().arena.dimensions[0])
-          .fill(undefined)
-          .map((_, colIndex) => {
-            const colEl = document.createElement('td');
-            const colId = `col-${colIndex}-row-${rowIndex}`;
-            colEl.setAttribute('id', colId);
-            const colContentEl = document.createElement('div');
-            const colContentId = `col-${colIndex}-row-${rowIndex}-content`;
-            colContentEl.setAttribute('id', colContentId);
-            colContentEl.classList.add('cell_contents');
-            colEl.appendChild(colContentEl);
   
-            colEl.addEventListener('mouseenter', () => {
-              refreshUi(state);
-              const entity = state.getTurnOrder()[0];
-              // display the path from current space to desired space
-              const path = calcPath(entity.position, [colIndex, rowIndex]);
-              path.forEach((coordinate, i) => {
-                // indicate if abilities will permit this or not
-                const color = i > entity.abilities.length - 1 ? 'red' : 'cyan';
-                const el = document.getElementById(`col-${coordinate[0]}-row-${coordinate[1]}`);
-                el.setAttribute('style', `background-color: ${color};`);
-              });
-            }); 
-            
-            colEl.addEventListener('click', () => {
-              const entity = state.getTurnOrder()[0];
-              // check if this is a valid move
-              const path = calcPath(entity.position, [colIndex, rowIndex]);
-              const isValid = path.length <= entity.abilities.length;
-              if (isValid) {
-                // todo: if so, ask player to commit abilities and perform updates
-                requestAbilities(state);
-              }
-            });
+  /**
+   * @param {{
+   *   name: string;
+   *   terrain: Terrain[][];
+   *   id: string;
+   *   nationTerrain: Terrain;
+   * }} config 
+   */
+  constructor({ name, terrain, id, nationTerrain }) {
+    this.id = id;
+    this.name = name;
+    this.terrain = terrain;
+    this.nationTerrain = nationTerrain;
+  }
 
-            rowEl.appendChild(colEl);
-            return {
-              id: colId,
-              contentId: colContentId,
-              coordinates: [colIndex, rowIndex],
-              el: colEl,
-              contentEl: colContentEl,
-            };
-          }),
-        el: rowEl,
-      };
+  buildUi() {
+    console.log(this.terrain);
+    const nationTemplate = `<li class="nation nation_${this.id}">
+      <p class="nation_name">${this.name}</p>
+      <ul class="nation_cards">
+          <li class="nation_card"></li>
+          <li class="nation_card"></li>
+          <li class="nation_card"></li>
+      </ul>
+      <ul class="nation_terrain">
+        ${this.terrain
+          .map((terrainRow) => `<li>
+            <ul class="nation_terrain_row">
+              ${terrainRow
+                  .map((terrain) => `<li class="nation_terrain_card terrain_${terrain.type.toLowerCase()}"></li>`)
+                  .join('\n')}
+            </ul>
+          </li>`)
+          .join('\n')}
+      </ul>
+    </li>
+    `;
+    
+    const tempContainer = document.createElement('ul');
+    tempContainer.innerHTML = nationTemplate;
+    return tempContainer.firstChild;
+  }
+}
+
+/**
+ * @readonly
+ * @enum {string}
+ */
+const TerrainType = {
+  PLAIN: 'Plain', // +w=wetland +s=mtn +v=chasm
+  FOREST: 'Forest', // +w=swamp +s=mtn +v=cave
+  AQUATIC: 'Aquatic', // +w=sea +s=mtn +v=underwater cave
+  DESERT: 'Desert', // +w=oasis +s=mtn +v=crater
+  TUNDRA: 'Tundra', // +w=frozen lake +s=mtn +v=sinkhole
+};
+
+const TerrainGroup = {
+  [TerrainType.PLAIN]: [TerrainType.FOREST, TerrainType.AQUATIC],
+  [TerrainType.FOREST]: [TerrainType.PLAIN, TerrainType.TUNDRA],
+  [TerrainType.AQUATIC]: [TerrainType.DESERT, TerrainType.PLAIN],
+  [TerrainType.DESERT]: [TerrainType.PLAIN, TerrainType.AQUATIC],
+  [TerrainType.TUNDRA]: [TerrainType.FOREST, TerrainType.AQUATIC],
+}
+
+/**
+ * @readonly
+ * @enum {string}
+ */
+const TerrainModifier = {
+  VOID: 'Void',
+  WATER: 'Water',
+  STONE: 'Stone',
+};
+
+class Terrain {
+  /**
+   * @type {string}
+   */
+  id = null;
+
+  /**
+   * @type {TerrainModifier[]}
+   */
+  modifiers = null;
+
+  /**
+   * @type {TerrainType}
+   */
+  type = null;
+
+  constructor({ modifiers, type }) {
+    this.id = Math.random().toString();
+    this.modifiers = modifiers;
+    this.type = type;
+  }
+}
+
+/**
+ * @type {{
+ *   nations: Nation[][];
+ *   terrain: Terrain[][];
+ * }}
+ */
+const STATE = {
+  nations: [],
+  terrain: [],
+};
+
+function getRandomFromList(list) {
+  return list[Math.ceil(Math.random() * list.length - 1)];
+}
+function getRandomTerrainType(types) {
+  return getRandomFromList(types || Object.values(TerrainType));
+}
+
+function weightTerrainGroup(group) {
+  return [].concat(
+    new Array(9).fill(group[0]),
+    new Array(1).fill(group[1]),
+  );
+}
+
+/**
+ * @param {{
+ *   nationCount: number;
+ *   terrainSize: number;
+ * }} settings
+ */
+function startGame({
+  nationCount,
+  terrainSize,
+}) {
+  const nations = document.getElementById('nations');
+  STATE.nations = new Array(nationCount)
+    .fill(undefined)
+    .map((_, i) => {
+      const nationTerrain = getRandomTerrainType();
+      return new Nation({
+        id: i,
+        name: Math.random().toString(),
+        nationTerrain,
+        terrain: new Array(terrainSize)
+          .fill(undefined)
+          .map(() => [
+            new Terrain({ type: getRandomTerrainType(TerrainGroup[nationTerrain]) }),
+            new Terrain({ type: getRandomTerrainType(TerrainGroup[nationTerrain]) }),
+            new Terrain({ type: getRandomTerrainType(TerrainGroup[nationTerrain]) }),
+          ]),
+      });
     });
-}
 
-/**
- * @param {State} state 
- */
-function drawArena(state) {
-  state.getArena().forEach((row) => {
-    if (!document.getElementById(row.id)) {
-      mapEl.appendChild(row.el);
-    }
-    row.cols.forEach((col) => {
-      col.el.setAttribute('style', '');
-    });
+  STATE.nations.forEach((nation) => {
+    const ui = nation.buildUi();
+    nations.appendChild(ui);
   });
 }
-
-/**
- * @returns {Monster}
- */
-function genMonster() {
-  const name = new Array(Math.ceil(Math.random() * 4))
-    .fill(undefined)
-    .reduce((result) => `${result}${String.fromCharCode(Math.ceil((Math.random() * 25) + 65))}`, '');
-  const el = document.createElement('p');
-  el.innerText = name;
-  return {
-    name,
-    hp: 10,
-    abilities: [
-      ABILITIES_MAP.black,
-      ABILITIES_MAP.black,
-    ],
-    position: [0,0],
-    el,
-  };
-}
-
-/**
- * @param {number} monsterCount
- * @returns {Monster[]}
- */
-function createMonsters(monsterCount) {
-  return new Array(monsterCount)
-    .fill(undefined)
-    .map(genMonster)
-}
-
-/**
- * @param {number} playerNumber 
- * @returns {Player}
- */
-function genPlayer(playerNumber) {
-  const name = `Player ${playerNumber}`;
-  const el = document.createElement('p');
-  el.innerText = name;
-  return {
-    hp: 10,
-    name,
-    position: [0, 0],
-    playerNumber,
-    abilities: [
-      ABILITIES_MAP.black,
-      ABILITIES_MAP.black,
-      ABILITIES_MAP.white,
-    ],
-    el,
-  };
-}
-
-/**
- * @param {number} playerCount 
- * @returns {Player[]}
- */
-function createPlayers(playerCount) {
-  return new Array(playerCount)
-    .fill(undefined)
-    .map((_, i) => genPlayer(i))
-}
-
-/**
- * @param {Entity[]} entities 
- * @returns {HTMLElement}
- */
-function genTurnOrder(entities) {
-  const containerEl = document.createElement('ol');
-  entities.forEach((entity) => {
-    const entityEl = document.createElement('li');
-    entityEl.innerText = entity.name;
-    containerEl.appendChild(entityEl);
-  });
-  return containerEl;
-}
-
-function genSkillsUi(abilities) {
-  const skillsContainer = document.createElement('ul');
-  abilities.forEach((ability) => {
-    const abilityEl = document.createElement('li');
-    abilityEl.innerText = ability;
-    skillsContainer.appendChild(abilityEl);
-  });
-  return skillsContainer;
-}
-
-function State() {
-  let options = null;
-  this.setOptions = (opt) => { options = opt; };
-  this.getOptions = () => options;
-
-  let arena = null;
-  this.setArena = (a) => { arena = a; };
-  this.getArena = () => arena;
-
-  let turnOrder = [];
-  this.setTurnOrder = (newOrder) => { turnOrder = newOrder; }
-  this.getTurnOrder = () => turnOrder;
-  this.advanceTurn = () => {
-    this.setTurnOrder([
-      ...this.getTurnOrder().slice(1, this.getTurnOrder().length),
-      this.getTurnOrder()[0],
-    ]);
-  };
-
-  let turnData = {};
-  this.setTurnData = (key, value) => { turnData[key] = value; };
-  this.getTurnData = (key) => turnData[key];
-  this.removeTurnData = (key) => { delete turnData[key] };
-  this.clearTurnData = () => { turnData = {}; };
-
-  let monsters = null;
-  this.setMonsters = (m) => { monsters = m; };
-  this.getMonsters = () => monsters;
-
-  let players = null;
-  this.setPlayers = (p) => { players = p; };
-  this.getPlayers = () => players;
-}
-
-function refreshUi(state) {
-  // update turn order
-  const turnOrder = genTurnOrder(state.getTurnOrder());
-  turnOrderEl.replaceChildren(turnOrder);
-
-  // redraw arena
-  drawArena(state);
-
-  // draw entities
-  [...state.getPlayers(), ...state.getMonsters()].forEach((monster) => {
-    const containerEl = document.getElementById(`col-${monster.position[0]}-row-${monster.position[1]}-content`);
-    containerEl.appendChild(monster.el);
-  });
-
-  // redraw abilities for new entity turn
-  abilitiesEl.replaceChildren(genSkillsUi(state.getTurnOrder()[0].abilities));
-}
-
-/**
- * @param {GameOptions} options 
- */
-function initGame(options) {
-  const state = new State(); 
-  state.setOptions(options);
-
-  state.setArena(genArena(state));
-
-  state.setMonsters(createMonsters(options.arena.monsterCount));
-  state.getMonsters()[0].position = [1, 1]; // todo: remove this and randomly gen based on scenario tile
-  state.getMonsters()[1].position = [6, 1]; // todo: remove this and randomly gen based on scenario tile
-
-  state.setPlayers(createPlayers(options.playerCount));
-  state.getPlayers()[0].position = [0,7]; // todo: remove this and make players pick
-
-  state.setTurnOrder([...state.getPlayers(), ...state.getMonsters()]);
-
-  const endTurnButton = document.createElement('button');
-  endTurnButton.innerText = 'End Turn';
-  endTurnButton.addEventListener('click', () => {
-    state.advanceTurn();
-    refreshUi(state);
-  });
-  document.body.appendChild(endTurnButton);
-
-  refreshUi(state);
-}
-
-initGame(GAME_OPTIONS);
+startGame({
+  nationCount: 3,
+  terrainSize: 3,
+});

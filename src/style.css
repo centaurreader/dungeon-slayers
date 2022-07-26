@@ -1,43 +1,97 @@
+:root {
+    --terrain_background: #fff;
+    --terrain_shadow: rgba(0, 0, 0, 0.25);
+}
+
 * { box-sizing: border-box; }
 
-html { background-color: lightgray; }
-body { width: 32rem; margin: 0 auto; }
+body { background: lightblue; }
 
-table {
-    width: 32rem;
-    table-layout: fixed;
+.nation_0 {
+    --nation_primary: #18AC00;
+    --nation_contrast: #add1a6;
+}
+.nation_1 {
+    --nation_primary: #0084FF;
+    --nation_contrast: #acc6de;
+}
+.nation_2 {
+    --nation_primary: #d70000;
+    --nation_contrast: #ecbdbd;
 }
 
-td,
-tr { border: 1px solid grey; }
-
-tr { height: 4rem; }
-td { width: 4rem; overflow: hidden; }
-
-td { background-color: white; }
-
-.cell_contents {
+.nations,
+.nation_cards {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
     display: flex;
-    align-items: center;
-    justify-content: center;
+}
+.nations {
+    margin-top: 1.5rem;
+}
+.nation {
+    flex: 1;
+    position: relative;
+}
+.nation_name {
+    position: absolute;
+    left: 50%;
+    top: -2rem;
+    transform: translateX(-50%);
+    padding: .25rem .5rem;
+    background: var(--nation_primary);
+    color: #fff;
+}
+.nation_cards {
+    background: var(--nation_contrast);
+    border: 4px solid var(--nation_primary);
+    padding: .5rem .25rem;
+}
+.nation_card {
+    flex: 1;
+    margin: 0 .25rem;
+    height: 1rem;
+    background: var(--nation_primary);
+    border: 1px solid var(--nation_contrast);
+    box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.25);
+    border-radius: 8px;
 }
 
-.modal {
-    background: white;
-    position: fixed;
-    top: 1rem;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 100;
+
+.nation_terrain,
+.nation_terrain_row {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
 }
-.scrim {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    height: 100%;
-    width: 100%;
-    background-color: transparent;
-    z-index: 99;
+.nation_terrain { margin-top: .25rem; }
+.nation_terrain_row {
+    display: flex;
+    padding: .125rem .25rem;
+    border: 4px solid transparent;
+    border-top: none;
+    border-bottom: none;
+}
+.nation_terrain_card {
+    flex: 1;
+    background: var(--terrain_background);
+    box-shadow: 0px .25rem .25rem var(--terrain_shadow);
+    border-radius: .5rem;
+    height: 11rem;
+    margin: .25rem;
+}
+
+.terrain_plain { background: url('https://cdn.britannica.com/17/141517-050-7CB9C223/Great-Plains-cultivation-North-Dakota.jpg?w=400&h=300&c=crop'); }
+.terrain_forest { background: url('https://media.cntraveler.com/photos/5eb18e42fc043ed5d9779733/16:9/w_2580,c_limit/BlackForest-Germany-GettyImages-147180370.jpg'); }
+.terrain_aquatic { background: url('https://www.thoughtco.com/thmb/YZa0RNLVu50aJhz7SSxSL63Ekgg=/1500x1500/smart/filters:no_upscale()/83637127-56a0060f5f9b58eba4ae8ac2.jpg'); }
+.terrain_desert { background: url('https://www.thoughtco.com/thmb/u0q_l5AO58jzsrNOdHqoPxpFnUE=/1885x1414/smart/filters:no_upscale()/wave-pattern-desert-landscape--oman-886145780-5c45542046e0fb00012ebabf.jpg'); }
+.terrain_tundra { background: url('https://www.treehugger.com/thmb/FIxF0nd6L2ezA3tp607EV21SvSI=/1500x1000/filters:fill(auto,1)/tundra-climate-5be07fabc9e77c0051e2145d.jpg'); }
+.terrain_plain,
+.terrain_forest,
+.terrain_aquatic,
+.terrain_desert,
+.terrain_tundra {
+    background-size: cover;
+    background-blend-mode: overlay;
 }

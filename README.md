@@ -1,24 +1,27 @@
-# Dungeon Slayers
+# Rise of DMAN
 
-Crawl scenario-based dungeons and slay everything in your path.
+Play the historic tale of Dman and his world-destroying boots. Explore the land, pit enemy forces against one another, and define your empire.
 
 ## TODO
-- [x] Display abilities of current player/monster turn
-- [x] Turn order
-    - [x] display turn order
-    - [x] adjust turn order on turn end
-- [ ] Allow player to select their move(s)
-    - [x] highlight on move
-    - [x] display invalid move
-    - [x] feat: trigger on valid move
-        - [x] refactor: update arena instead of replacing so click listeners remain?
-    - [ ] feat: select abilities to power move
-        - [ ] update UI to reflect used ability
-    - [ ] feat: reset turn
-- [ ] feat: Evaluate monster moves
-    - [ ] feat: always move closer
-    - [ ] feat: always attack nearest
-- [ ] feat: Design encounter object
-- [ ] feat: Draw actual maps
-    - [ ] feat: polygons (not just squares, rects)
-    - [ ] feat: scroll the map with the mouse / player movement
+
+- [ ] Terrain Types
+    - [ ] generate
+        - [x] theme each nation toward a pair of types (i.e. Forest + Plains, Tundra + Aquatic, Desert)
+        - [ ] tilesets for nation terrain type
+            - [ ] PLAIN
+            - [ ] FOREST
+            - [ ] AQUATIC
+            - [ ] DESERT
+            - [ ] TUNDRA
+- [ ] Terrain Modifiers
+    - [ ] generate
+    - [ ] style
+- [ ] Terrain resolution (X + Y = Z)
+- [ ] Start Game with Player
+- [ ] Place Nation armies in terrain
+- [ ] Turn
+    - [ ] Day sequence
+    - [ ] Resolve Nation army movements every X turns
+- [ ] Contiguous water movement costs 1 move
+- [ ] Each Nation has a capital
+- [ ] Players can fight battles with foreign banners to confuse
